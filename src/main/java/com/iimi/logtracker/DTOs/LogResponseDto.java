@@ -8,6 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class LogResponseDto {
+    private Long id;
     private String username;
     private String device_name;
     private String device_type;

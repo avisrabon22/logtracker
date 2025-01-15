@@ -1,12 +1,10 @@
 package com.iimi.logtracker.Controllers;
 
+import com.iimi.logtracker.DTOs.LogRequestDto;
 import com.iimi.logtracker.DTOs.LogResponseDto;
 import com.iimi.logtracker.Services.LogService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,4 +23,11 @@ public class LogController {
         List<LogResponseDto> logs =logService.getLogs();
         return ResponseEntity.ok().body(logs);
     }
+
+    @PostMapping("/add-logs")
+    public void addLogs(@RequestBody LogRequestDto logRequestDto){
+         System.out.println(logRequestDto.getLog_time());
+        logService.addLogs(logRequestDto);
+    }
+
 }

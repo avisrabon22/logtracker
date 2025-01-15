@@ -10,6 +10,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @MappedSuperclass
@@ -18,7 +20,7 @@ public class BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @CreatedDate
-    private String createdAt;
+    private Date createdAt;
     @LastModifiedDate
-    private String updatedAt;
+    private Date updatedAt;
 }

@@ -3,6 +3,9 @@ package com.iimi.logtracker.DTOs;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -12,6 +15,6 @@ public class LogResponseDto {
     private String username;
     private String device_name;
     private String device_type;
-    private Date log_date;
-    private Time log_time;
+    private LocalDate log_date;
+    private LocalTime log_time;
 }

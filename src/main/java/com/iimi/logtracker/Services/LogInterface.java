@@ -6,7 +6,7 @@ import com.iimi.logtracker.DTOs.LogResponseDto;
 import java.util.List;
 
 public interface LogInterface {
-    String addLog(LogRequestDto logRequestDto);
     List<LogResponseDto> getLogs();
+    void addLogs(LogRequestDto logRequestDto);
 
 }

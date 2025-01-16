@@ -39,13 +39,13 @@ public class LogService implements LogInterface {
 
     @Override
     public void addLogs(LogRequestDto logRequestDto) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); // Combined format
         try {
             LogModel logModel = new LogModel();
             logModel.setUsername(logRequestDto.getUsername());
             logModel.setDevice_name(logRequestDto.getDevice_name());
             logModel.setDevice_type(logRequestDto.getDevice_type());
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//            Set date and time
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate logDate = LocalDate.parse(logRequestDto.getLog_date(), dateFormatter);
 
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");

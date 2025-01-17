@@ -13,6 +13,7 @@ public class LogRequestDto {
     private String username;
     private String device_name;
     private String device_type;
+    private Long log_id;
     private String log_date;
     private String log_time;
 }

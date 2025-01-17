@@ -1,5 +1,6 @@
 package com.iimi.logtracker.Controllers;
 
+import com.iimi.logtracker.DTOs.LogIdSearchRequestDto;
 import com.iimi.logtracker.DTOs.LogRequestDto;
 import com.iimi.logtracker.DTOs.LogResponseDto;
 import com.iimi.logtracker.Services.LogService;
@@ -30,4 +31,10 @@ public class LogController {
         logService.addLogs(logRequestDto);
     }
 
+    public ResponseEntity<?> searchByLogId(@RequestBody LogIdSearchRequestDto logIdSearchRequestDto){
+        if(logIdSearchRequestDto.getLogId().equals(null)){
+            return ResponseEntity.badRequest().body("Log Id is required");
+        }
+        return ResponseEntity.ok().body(logService.searchByLogId(logIdSearchRequestDto));
+    }
 }

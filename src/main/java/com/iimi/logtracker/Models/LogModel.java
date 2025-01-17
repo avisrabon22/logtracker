@@ -18,6 +18,8 @@ public class LogModel extends BaseModel {
     private String username;
     @Column(name = "device_name")
     private String device_name;
+    @Column(name = "log_id")
+    private Long log_id;
     @Column(name = "device_type")
     private String device_type;
     @Column(name = "log_date", columnDefinition = "DATE")

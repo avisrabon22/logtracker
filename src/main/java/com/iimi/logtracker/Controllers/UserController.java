@@ -4,6 +4,7 @@ import com.iimi.logtracker.DTOs.LoginRequestDto;
 import com.iimi.logtracker.DTOs.LoginResponseDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
 import com.iimi.logtracker.DTOs.UserResponseDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public UserResponseDto signup(@RequestBody  UserRequestDto userRequestDto){
-        return null;
+    public ResponseEntity<?> signup(@RequestBody  UserRequestDto userRequestDto){
+
+        return ResponseEntity.ok().body("User created successfully "+userRequestDto.getUsername());
     }
 
 }

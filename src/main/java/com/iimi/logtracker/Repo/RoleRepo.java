@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RoleRepo extends JpaRepository<RoleModel,Long> {
     RoleModel findByRole(String role);
+    RoleModel deleteByRoleName(String roleName);
 }

@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RoleModel extends BaseModel {
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String role;
 }

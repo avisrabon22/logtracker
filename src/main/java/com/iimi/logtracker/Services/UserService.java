@@ -37,11 +37,11 @@ public class UserService implements UserInterface {
 
         try{
 
-            RoleModel role = roleRepo.findByRole(userRequestDto.getRole());
+            RoleModel role = roleRepo.findByRoleName(userRequestDto.getRole());
             List<RoleModel> roles = new ArrayList<>();
 
-            if (!role.getRole().isEmpty()) {
-                role.setRole(userRequestDto.getRole());
+            if (!role.getRoleName().isEmpty()) {
+                role.setRoleName(userRequestDto.getRole());
                 roles.add(role);
             }
             userModel.setRole(roles);

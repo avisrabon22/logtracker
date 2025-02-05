@@ -7,7 +7,7 @@ import java.util.List;
 public interface RoleInterface {
     public RoleResponseDto createRole(RoleRequestDto roleRequestDto) throws Exception;
     public List<RoleResponseDto> getRoles() throws Exception;
-    public RoleResponseDto getRole(String roleName) throws Exception;
+    public RoleResponseDto getRole(Long id) throws Exception;
     public RoleResponseDto updateRole(RoleRequestDto roleRequestDto) throws Exception;
-    public RoleResponseDto deleteRole(String roleName) throws Exception;
+    public RoleResponseDto deleteRole(Long id) throws Exception;
 }

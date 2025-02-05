@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleService implements RoleInterface{
@@ -55,19 +56,20 @@ public class RoleService implements RoleInterface{
     }
 
     @Override
-    public RoleResponseDto getRole(String roleName) throws Exception {
-        if (roleName.isBlank()) {
+    public RoleResponseDto getRole(Long id) throws Exception {
+        if (id==null) {
             throw new NotFound("Please select a role");
         }
         try
         {
-            RoleModel role=roleRepo.findByRoleName(roleName);
-            if (role.getRoleName().isEmpty())
+            Optional<RoleModel> role=roleRepo.findById(id);
+            if (role.isEmpty())
             {
                 throw new NotFound("Role not found");
             }
             RoleResponseDto roleResponseDto = new RoleResponseDto();
-            roleResponseDto.setRoleName(role.getRoleName());
+            roleResponseDto.setId(role.get().getId());
+            roleResponseDto.setRoleName(role.get().getRoleName());
             return roleResponseDto;
         } catch (Exception e) {
             throw new Exception("Something went wrong");
@@ -93,19 +95,16 @@ public class RoleService implements RoleInterface{
     }
 
     @Override
-    public RoleResponseDto deleteRole(String roleName) throws Exception {
+    public RoleResponseDto deleteRole(Long id) throws Exception {
         try
         {
-            RoleModel getRole=roleRepo.findByRoleName(roleName);
-            if (getRole.getRoleName().isEmpty())
+            Optional<RoleModel> getRole=roleRepo.findById(id);
+            if (getRole.isEmpty())
             {
                 throw new NotFound("Role not found");
             }
-            RoleModel roleModel=roleRepo.deleteByRoleName(roleName);
-            if (roleModel.getRoleName().isEmpty())
-            {
-                throw new NotFound("Role not deleted");
-            }
+             roleRepo.deleteById(id);
+            RoleModel roleModel = getRole.get();
             RoleResponseDto roleResponseDto = new RoleResponseDto();
             roleResponseDto.setRoleName(roleModel.getRoleName());
             return roleResponseDto;

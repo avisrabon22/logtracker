@@ -30,21 +30,21 @@ public class RoleController {
          return ResponseEntity.ok(roleResponseDto);
      }
 
-     @GetMapping("/get-role/{roleName}")
-     public ResponseEntity<?> getRole(@PathVariable String roleName) throws Exception {
-         RoleResponseDto roleResponseDto = roleService.getRole(roleName);
+     @GetMapping("/get-role/{id}")
+     public ResponseEntity<?> getRole(@PathVariable Long id) throws Exception {
+         RoleResponseDto roleResponseDto = roleService.getRole(id);
          return ResponseEntity.ok(roleResponseDto);
      }
 
-     @PutMapping("/update-role/{roleName}")
+     @PutMapping("/update-role")
      public ResponseEntity<?> updateRole(@RequestBody RoleRequestDto roleRequestDto) throws Exception {
          RoleResponseDto roleResponseDto = roleService.updateRole(roleRequestDto);
          return ResponseEntity.ok(roleResponseDto);
      }
 
-     @DeleteMapping("/delete-role/{roleName}")
-     public ResponseEntity<?> deleteRole(@PathVariable String roleName) throws Exception {
-         RoleResponseDto roleResponseDto=roleService.deleteRole(roleName);
+     @DeleteMapping("/delete-role/{id}")
+     public ResponseEntity<?> deleteRole(@PathVariable Long id) throws Exception {
+         RoleResponseDto roleResponseDto=roleService.deleteRole(id);
          return ResponseEntity.ok(roleResponseDto);
      }
 

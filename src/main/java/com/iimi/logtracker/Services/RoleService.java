@@ -2,6 +2,7 @@ package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.RoleRequestDto;
 import com.iimi.logtracker.DTOs.RoleResponseDto;
+import com.iimi.logtracker.DTOs.UpdateRoleRequestDto;
 import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.RoleModel;
@@ -24,12 +25,13 @@ public class RoleService implements RoleInterface{
     public RoleResponseDto createRole(RoleRequestDto roleRequestDto) throws Exception {
         try {
             RoleModel roleModel = new RoleModel();
-            roleModel.setRoleName(roleRequestDto.getRoleName());
-            RoleModel getRole=roleRepo.findByRoleName(roleRequestDto.getRoleName());
+            RoleModel getRole=roleRepo.findByRoleName("ROLE_"+roleRequestDto.getRoleName().toUpperCase());
             if (roleModel.equals(getRole)) {
                 throw new AlreadyExist("Role already exists");
             }
+            roleModel.setRoleName("ROLE_"+roleRequestDto.getRoleName().toUpperCase());
             roleRepo.save(roleModel);
+
             RoleResponseDto roleResponseDto = new RoleResponseDto();
             roleResponseDto.setRoleName(roleModel.getRoleName());
             return roleResponseDto;
@@ -77,16 +79,18 @@ public class RoleService implements RoleInterface{
     }
 
     @Override
-    public RoleResponseDto updateRole(RoleRequestDto roleRequestDto) throws Exception {
+    public RoleResponseDto updateRole(UpdateRoleRequestDto updateRoleRequestDto) throws Exception {
+        if (updateRoleRequestDto.getId()==null) {
+            throw new NotFound("Please enter a role name");
+        }
         try {
-            RoleModel roleRepoByRole=roleRepo.findByRoleName(roleRequestDto.getRoleName());
-            if (roleRepoByRole.getRoleName().isEmpty()) {
-                throw new NotFound("Role not found");
-            }
-            roleRepoByRole.setRoleName(roleRequestDto.getRoleName());
-            roleRepo.save(roleRepoByRole);
+            RoleModel roleModel=roleRepo.findById(updateRoleRequestDto.getId()).orElseThrow(()->new NotFound("Role not found"));
+            roleModel.setId(updateRoleRequestDto.getId());
+            roleModel.setRoleName("ROLE_"+updateRoleRequestDto.getRoleName().toUpperCase());
+            roleRepo.save(roleModel);
             RoleResponseDto roleResponseDto = new RoleResponseDto();
-            roleResponseDto.setRoleName(roleRepoByRole.getRoleName());
+            roleResponseDto.setId(roleModel.getId());
+            roleResponseDto.setRoleName(roleModel.getRoleName());
             return roleResponseDto;
           }
           catch (Exception e) {

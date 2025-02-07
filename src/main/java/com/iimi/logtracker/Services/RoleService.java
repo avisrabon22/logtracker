@@ -22,38 +22,43 @@ public class RoleService implements RoleInterface{
     }
 
     @Override
-    public RoleResponseDto createRole(RoleRequestDto roleRequestDto) throws Exception {
-        try {
-            RoleModel roleModel = new RoleModel();
-            RoleModel getRole=roleRepo.findByRoleName("ROLE_"+roleRequestDto.getRoleName().toUpperCase());
-            if (roleModel.equals(getRole)) {
-                throw new AlreadyExist("Role already exists");
-            }
-            roleModel.setRoleName("ROLE_"+roleRequestDto.getRoleName().toUpperCase());
-            roleRepo.save(roleModel);
-
-            RoleResponseDto roleResponseDto = new RoleResponseDto();
-            roleResponseDto.setRoleName(roleModel.getRoleName());
-            return roleResponseDto;
-        } catch (Exception e) {
-            throw new Exception("Something went wrong");
+    public RoleResponseDto createRole(RoleRequestDto roleRequestDto) throws Exception, AlreadyExist {
+        String roleName = roleRequestDto.getRoleName();
+        RoleModel roleModel = new RoleModel();
+        Optional<RoleModel> getRole=roleRepo.findByRoleName("ROLE_"+roleName.toUpperCase());
+        if (getRole.isPresent())
+        {
+            throw new AlreadyExist("Role already exists");
         }
+        roleModel.setRoleName("ROLE_"+roleName.toUpperCase());
+        try{
+            roleRepo.save(roleModel);
+        }
+        catch (Exception e){
+            throw new Exception("Data not submitted!");
+        }
+
+        RoleResponseDto roleResponseDto = new RoleResponseDto();
+        roleResponseDto.setRoleName(roleModel.getRoleName().substring(5));
+        return roleResponseDto;
+
     }
 
     @Override
     public List<RoleResponseDto> getRoles() throws Exception {
-            List<RoleModel> roleModelList=roleRepo.findAll();
-            if(roleModelList.isEmpty()){
-                throw new NotFound("No roles found");
-            }
-            List<RoleResponseDto> roleResponseDtoList = new ArrayList<>();
-            for (RoleModel roleModel : roleModelList) {
-                RoleResponseDto roleResponseDto = new RoleResponseDto();
-                roleResponseDto.setId(roleModel.getId());
-                roleResponseDto.setRoleName(roleModel.getRoleName());
-                roleResponseDtoList.add(roleResponseDto);
-            }
-            return roleResponseDtoList;
+        List<RoleModel> roleModelList=roleRepo.findAll();
+        if(roleModelList.isEmpty()){
+            throw new NotFound("No roles found");
+        }
+        List<RoleResponseDto> roleResponseDtoList = new ArrayList<>();
+        for (RoleModel roleModel : roleModelList) {
+            RoleResponseDto roleResponseDto = new RoleResponseDto();
+            roleResponseDto.setId(roleModel.getId());
+
+            roleResponseDto.setRoleName(roleModel.getRoleName().substring(5));
+            roleResponseDtoList.add(roleResponseDto);
+        }
+        return roleResponseDtoList;
 
     }
 
@@ -71,7 +76,7 @@ public class RoleService implements RoleInterface{
             }
             RoleResponseDto roleResponseDto = new RoleResponseDto();
             roleResponseDto.setId(role.get().getId());
-            roleResponseDto.setRoleName(role.get().getRoleName());
+            roleResponseDto.setRoleName(role.get().getRoleName().substring(5));
             return roleResponseDto;
         } catch (Exception e) {
             throw new Exception("Something went wrong");
@@ -80,22 +85,33 @@ public class RoleService implements RoleInterface{
 
     @Override
     public RoleResponseDto updateRole(UpdateRoleRequestDto updateRoleRequestDto) throws Exception {
-        if (updateRoleRequestDto.getId()==null) {
-            throw new NotFound("Please enter a role name");
+        RoleModel role = new RoleModel();
+        if (updateRoleRequestDto.getId()==null || updateRoleRequestDto.getRoleName().isEmpty()) {
+            throw new NotFound("Not getting a role name or id");
         }
+// get data from database *************************************************************
+            Optional<RoleModel> roleModel=roleRepo.findById(updateRoleRequestDto.getId());
+            if (roleModel.isPresent())
+            {
+                role.setId(updateRoleRequestDto.getId());
+                role.setRoleName("ROLE_"+updateRoleRequestDto.getRoleName().toUpperCase());
+            }
+            else {
+                throw new NotFound("Role not found!");
+            }
+//            Save data in db *************************************
         try {
-            RoleModel roleModel=roleRepo.findById(updateRoleRequestDto.getId()).orElseThrow(()->new NotFound("Role not found"));
-            roleModel.setId(updateRoleRequestDto.getId());
-            roleModel.setRoleName("ROLE_"+updateRoleRequestDto.getRoleName().toUpperCase());
-            roleRepo.save(roleModel);
-            RoleResponseDto roleResponseDto = new RoleResponseDto();
-            roleResponseDto.setId(roleModel.getId());
-            roleResponseDto.setRoleName(roleModel.getRoleName());
-            return roleResponseDto;
-          }
-          catch (Exception e) {
-              throw new Exception("Something went wrong");
-          }
+            roleRepo.save(role);
+        }
+        catch(Exception e){
+            throw new Exception("Data not updated!");
+        }
+
+        RoleResponseDto roleResponseDto = new RoleResponseDto();
+        roleResponseDto.setId(role.getId());
+        roleResponseDto.setRoleName(role.getRoleName().substring(5));
+        return roleResponseDto;
+
     }
 
     @Override
@@ -107,7 +123,7 @@ public class RoleService implements RoleInterface{
             {
                 throw new NotFound("Role not found");
             }
-             roleRepo.deleteById(id);
+            roleRepo.deleteById(id);
             RoleModel roleModel = getRole.get();
             RoleResponseDto roleResponseDto = new RoleResponseDto();
             roleResponseDto.setRoleName(roleModel.getRoleName());

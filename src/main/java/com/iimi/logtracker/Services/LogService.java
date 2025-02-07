@@ -9,15 +9,11 @@ import com.iimi.logtracker.Models.LogModel;
 import com.iimi.logtracker.Repo.LogRepo;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +66,7 @@ public class LogService implements LogInterface {
 
 //    search by log id *****************************************************************
     @Override
-    public List<LogResponseDto> searchByLogId(LogIdSearchRequestDto logIdSearchRequestDto) {
+    public List<LogResponseDto> searchByLogId(LogIdSearchRequestDto logIdSearchRequestDto) throws NotFound {
         List<LogResponseDto> logResponseDtoList = new ArrayList<>();
         try {
             Optional<List<LogModel>> logModelList =logRepo.findByLogId(logIdSearchRequestDto.getLogId());
@@ -81,12 +77,12 @@ public class LogService implements LogInterface {
                 }
             }
             return logResponseDtoList;
-        }catch (NotFound e){
+        }catch (Exception e){
             throw  new NotFound("No such id found!!");
 
         }
     }
-// setup the response dto of log for search by log id *****************************************************************
+// set the response dto of log for search by log id *****************************************************************
     private static LogResponseDto getLogResponseDto(LogModel logModelResponse) {
         LogResponseDto logResponseDto = new LogResponseDto();
         logResponseDto.setId(logModelResponse.getLog_id());

@@ -27,6 +27,9 @@ public class RoleController {
 
      @PostMapping("/add-role")
      public ResponseEntity<?> createRole(@RequestBody RoleRequestDto roleRequestDto) throws Exception {
+        if (roleRequestDto.getRoleName().isEmpty()) {
+            return ResponseEntity.badRequest().body("Role name cannot be empty");
+        }
          RoleResponseDto roleResponseDto = roleInterface.createRole(roleRequestDto);
          return ResponseEntity.ok(roleResponseDto);
      }

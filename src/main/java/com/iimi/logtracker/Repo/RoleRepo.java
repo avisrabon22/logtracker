@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface RoleRepo extends JpaRepository<RoleModel,Long> {
-    RoleModel findByRoleName(String roleName);
+    Optional<RoleModel> findByRoleName(String roleName);
     RoleModel deleteByRoleName(String roleName);
 }

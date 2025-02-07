@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserInterface {
@@ -37,12 +38,12 @@ public class UserService implements UserInterface {
 
         try{
 
-            RoleModel role = roleRepo.findByRoleName(userRequestDto.getRole());
+            Optional<RoleModel> role = roleRepo.findByRoleName(userRequestDto.getRole());
             List<RoleModel> roles = new ArrayList<>();
 
-            if (!role.getRoleName().isEmpty()) {
-                role.setRoleName(userRequestDto.getRole());
-                roles.add(role);
+            if (role.isPresent()) {
+                role.get().setRoleName(userRequestDto.getRole());
+                roles.add(role.get());
             }
             userModel.setRole(roles);
             userRepo.save(userModel);

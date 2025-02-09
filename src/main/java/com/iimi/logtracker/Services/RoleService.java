@@ -126,7 +126,7 @@ public class RoleService implements RoleInterface{
             roleRepo.deleteById(id);
             RoleModel roleModel = getRole.get();
             RoleResponseDto roleResponseDto = new RoleResponseDto();
-            roleResponseDto.setRoleName(roleModel.getRoleName());
+            roleResponseDto.setRoleName(roleModel.getRoleName().substring(5));
             return roleResponseDto;
         } catch (Exception e) {
             throw new Exception("Something went wrong");

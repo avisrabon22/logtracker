@@ -2,7 +2,8 @@ package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.LoginRequestDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
-import com.iimi.logtracker.DTOs.UserResponseDto;
+import com.iimi.logtracker.DTOs.UserSignupResponseDto;
+import com.iimi.logtracker.DTOs.UsersResponseDto;
 import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Models.RoleModel;
 import com.iimi.logtracker.Models.UserModel;
@@ -26,18 +27,18 @@ public class UserService implements UserInterface {
 
 
     @Override
-    public UserResponseDto login(LoginRequestDto loginRequestDto) {
+    public UserSignupResponseDto login(LoginRequestDto loginRequestDto) {
         return null;
     }
 
     @Override
-    public UserResponseDto signup(UserRequestDto userRequestDto) throws AlreadyExist {
+    public UserSignupResponseDto signup(UserRequestDto userRequestDto) throws AlreadyExist {
         Optional<UserModel> user=userRepo.findByUserName(userRequestDto.getUsername());
         if(user.isPresent()){
            throw new AlreadyExist("User already exist");
        }
         UserModel userModel = new UserModel();
-        UserResponseDto userResponseDto = new UserResponseDto();
+        UserSignupResponseDto userSignupResponseDto = new UserSignupResponseDto();
 //        *********************************************
         userModel.setUserName(userRequestDto.getUsername());
         userModel.setPassword(userRequestDto.getPassword());
@@ -54,10 +55,31 @@ public class UserService implements UserInterface {
             }
             userModel.setRole(roles);
             userRepo.save(userModel);
-            userResponseDto.setUsername(userRequestDto.getUsername());
+            userSignupResponseDto.setUsername(userRequestDto.getUsername());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return userResponseDto;
+        return userSignupResponseDto;
     }
+
+    @Override
+    public List<UsersResponseDto> getUsers() {
+        List<UserModel> users = userRepo.findAll();
+
+        List<UsersResponseDto> userResponseDtos = new ArrayList<>();
+        if (!users.isEmpty()) {
+            for (UserModel user : users) {
+                 UsersResponseDto usersResponseDto = new UsersResponseDto();
+                 usersResponseDto.setId(user.getId());
+                usersResponseDto.setUsername(user.getUserName());
+                usersResponseDto.setRole(user.getRole().getFirst().getRoleName());
+                userResponseDtos.add(usersResponseDto);
+            }
+            System.out.println(userResponseDtos);
+            return userResponseDtos;
+        }
+        return userResponseDtos;
+    }
+
+
 }

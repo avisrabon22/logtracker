@@ -1,16 +1,12 @@
 package com.iimi.logtracker.Controllers;
 
 import com.iimi.logtracker.DTOs.LoginRequestDto;
-import com.iimi.logtracker.DTOs.LoginResponseDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
-import com.iimi.logtracker.DTOs.UserResponseDto;
+import com.iimi.logtracker.DTOs.UserSignupResponseDto;
 import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Services.UserInterface;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -32,8 +28,13 @@ public class UserController {
         {
             return ResponseEntity.ok().body("Please fill all filed!!");
         }
-        UserResponseDto userResponseDto=userInterface.signup(userRequestDto);
-        return ResponseEntity.ok().body(userResponseDto);
+        UserSignupResponseDto userSignupResponseDto =userInterface.signup(userRequestDto);
+        return ResponseEntity.ok().body(userSignupResponseDto);
     }
 
+    @GetMapping("/get-users")
+    public ResponseEntity<?>getUsers(){
+
+        return ResponseEntity.ok().body(userInterface.getUsers());
+    }
 }

@@ -3,6 +3,7 @@ package com.iimi.logtracker.Services;
 import com.iimi.logtracker.DTOs.LoginRequestDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
 import com.iimi.logtracker.DTOs.UserResponseDto;
+import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Models.RoleModel;
 import com.iimi.logtracker.Models.UserModel;
 import com.iimi.logtracker.Repo.RoleRepo;
@@ -30,24 +31,30 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public UserResponseDto signup(UserRequestDto userRequestDto) {
+    public UserResponseDto signup(UserRequestDto userRequestDto) throws AlreadyExist {
+        Optional<UserModel> user=userRepo.findByUserName(userRequestDto.getUsername());
+        if(user.isPresent()){
+           throw new AlreadyExist("User already exist");
+       }
         UserModel userModel = new UserModel();
-        userModel.setUserName(userRequestDto.getUsername());
-        userModel.setPassword(userModel.getPassword());
         UserResponseDto userResponseDto = new UserResponseDto();
-
+//        *********************************************
+        userModel.setUserName(userRequestDto.getUsername());
+        userModel.setPassword(userRequestDto.getPassword());
+//       **********************************************
         try{
-
             Optional<RoleModel> role = roleRepo.findByRoleName(userRequestDto.getRole());
             List<RoleModel> roles = new ArrayList<>();
 
             if (role.isPresent()) {
-                role.get().setRoleName(userRequestDto.getRole());
-                roles.add(role.get());
+                RoleModel roleModel = new RoleModel();
+                roleModel.setId(role.get().getId());
+                roleModel.setRoleName(role.get().getRoleName());
+                roles.add(roleModel);
             }
             userModel.setRole(roles);
             userRepo.save(userModel);
-            userResponseDto.setUsername(userResponseDto.getUsername());
+            userResponseDto.setUsername(userRequestDto.getUsername());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

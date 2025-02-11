@@ -4,6 +4,7 @@ import com.iimi.logtracker.DTOs.LoginRequestDto;
 import com.iimi.logtracker.DTOs.LoginResponseDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
 import com.iimi.logtracker.DTOs.UserResponseDto;
+import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Services.UserInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody  UserRequestDto userRequestDto){
+    public ResponseEntity<?> signup(@RequestBody  UserRequestDto userRequestDto) throws AlreadyExist {
         if(userRequestDto.getUsername().isBlank() || userRequestDto.getPassword().isBlank()||userRequestDto.getRole().isBlank())
         {
             return ResponseEntity.ok().body("Please fill all filed!!");

@@ -2,11 +2,10 @@ package com.iimi.logtracker.Models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ public class UserModel extends BaseModel{
     private String userName;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
-    @ManyToMany
-    private List<RoleModel> role;
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private RoleModel role;
 }

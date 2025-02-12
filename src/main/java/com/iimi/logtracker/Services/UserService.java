@@ -5,11 +5,13 @@ import com.iimi.logtracker.DTOs.UserRequestDto;
 import com.iimi.logtracker.DTOs.UserSignupResponseDto;
 import com.iimi.logtracker.DTOs.UsersResponseDto;
 import com.iimi.logtracker.Exception.AlreadyExist;
+import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.RoleModel;
 import com.iimi.logtracker.Models.UserModel;
 import com.iimi.logtracker.Repo.RoleRepo;
 import com.iimi.logtracker.Repo.UserRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,16 +46,14 @@ public class UserService implements UserInterface {
         userModel.setPassword(userRequestDto.getPassword());
 //       **********************************************
         try{
-            Optional<RoleModel> role = roleRepo.findByRoleName(userRequestDto.getRole());
-            List<RoleModel> roles = new ArrayList<>();
-
+            Optional<RoleModel> role = roleRepo.findByRoleName("ROLE_"+userRequestDto.getRole().toUpperCase());
             if (role.isPresent()) {
                 RoleModel roleModel = new RoleModel();
                 roleModel.setId(role.get().getId());
                 roleModel.setRoleName(role.get().getRoleName());
-                roles.add(roleModel);
+                userModel.setRole(roleModel);
             }
-            userModel.setRole(roles);
+
             userRepo.save(userModel);
             userSignupResponseDto.setUsername(userRequestDto.getUsername());
         } catch (Exception e) {
@@ -72,13 +72,24 @@ public class UserService implements UserInterface {
                  UsersResponseDto usersResponseDto = new UsersResponseDto();
                  usersResponseDto.setId(user.getId());
                 usersResponseDto.setUsername(user.getUserName());
-                usersResponseDto.setRole(user.getRole().getFirst().getRoleName());
+                usersResponseDto.setRole(user.getRole().getRoleName().substring(5));
                 userResponseDtos.add(usersResponseDto);
             }
-            System.out.println(userResponseDtos);
             return userResponseDtos;
         }
         return userResponseDtos;
+    }
+
+    @Override
+    public UserSignupResponseDto deleteUser(Long id) throws NotFound {
+        Optional<UserModel> user = userRepo.findById(id);
+        if (user.isPresent()) {
+            userRepo.deleteById(id);
+            UserSignupResponseDto userSignupResponseDto = new UserSignupResponseDto();
+            userSignupResponseDto.setUsername(user.get().getUserName());
+            return userSignupResponseDto;
+        }
+      throw new NotFound("User not found");
     }
 
 

@@ -4,6 +4,7 @@ import com.iimi.logtracker.DTOs.LoginRequestDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
 import com.iimi.logtracker.DTOs.UserSignupResponseDto;
 import com.iimi.logtracker.Exception.AlreadyExist;
+import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Services.UserInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,10 @@ public class UserController {
     public ResponseEntity<?>getUsers(){
 
         return ResponseEntity.ok().body(userInterface.getUsers());
+    }
+
+    @DeleteMapping("/delete-user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) throws NotFound {
+        return ResponseEntity.ok().body(userInterface.deleteUser(id));
     }
 }

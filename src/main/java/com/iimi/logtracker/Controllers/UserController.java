@@ -1,5 +1,6 @@
 package com.iimi.logtracker.Controllers;
 
+import com.iimi.logtracker.DTOs.GetUserRequestDto;
 import com.iimi.logtracker.DTOs.LoginRequestDto;
 import com.iimi.logtracker.DTOs.UserRequestDto;
 import com.iimi.logtracker.DTOs.UserSignupResponseDto;
@@ -42,5 +43,13 @@ public class UserController {
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) throws NotFound {
         return ResponseEntity.ok().body(userInterface.deleteUser(id));
+    }
+
+    @GetMapping("/get-user/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id) throws NotFound {
+        GetUserRequestDto getUserRequestDto = new GetUserRequestDto();
+        getUserRequestDto.setId(id);
+       return ResponseEntity.ok().body(userInterface.getUser(getUserRequestDto));
+
     }
 }

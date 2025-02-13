@@ -1,9 +1,6 @@
 package com.iimi.logtracker.Services;
 
-import com.iimi.logtracker.DTOs.LoginRequestDto;
-import com.iimi.logtracker.DTOs.UserRequestDto;
-import com.iimi.logtracker.DTOs.UserSignupResponseDto;
-import com.iimi.logtracker.DTOs.UsersResponseDto;
+import com.iimi.logtracker.DTOs.*;
 import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.RoleModel;
@@ -26,7 +23,6 @@ public class UserService implements UserInterface {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
     }
-
 
     @Override
     public UserSignupResponseDto login(LoginRequestDto loginRequestDto) {
@@ -78,6 +74,18 @@ public class UserService implements UserInterface {
             return userResponseDtos;
         }
         return userResponseDtos;
+    }
+
+    @Override
+    public GetUserResponseDto getUser(GetUserRequestDto getUserRequestDto) throws NotFound {
+        Optional<UserModel> userModel = userRepo.findById(getUserRequestDto.getId());
+         if (userModel.isEmpty())
+             throw new NotFound("No such user in store!");
+
+         GetUserResponseDto getUserResponseDto=new GetUserResponseDto();
+         getUserResponseDto.setUsername(userModel.get().getUserName());
+         getUserResponseDto.setRole(userModel.get().getRole().getRoleName().substring(5));
+        return getUserResponseDto;
     }
 
     @Override

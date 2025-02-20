@@ -1,9 +1,6 @@
 package com.iimi.logtracker.Controllers;
 
-import com.iimi.logtracker.DTOs.GetUserRequestDto;
-import com.iimi.logtracker.DTOs.LoginRequestDto;
-import com.iimi.logtracker.DTOs.UserRequestDto;
-import com.iimi.logtracker.DTOs.UserSignupResponseDto;
+import com.iimi.logtracker.DTOs.*;
 import com.iimi.logtracker.Exception.AlreadyExist;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Services.UserInterface;
@@ -35,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/get-users")
-    public ResponseEntity<?>getUsers(){
+    public ResponseEntity<?>getUsers() throws NotFound {
 
         return ResponseEntity.ok().body(userInterface.getUsers());
     }
@@ -51,5 +48,10 @@ public class UserController {
         getUserRequestDto.setId(id);
        return ResponseEntity.ok().body(userInterface.getUser(getUserRequestDto));
 
+    }
+
+    @PutMapping("/update-user")
+    public ResponseEntity<?> updateUser(UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
+        return ResponseEntity.ok().body(userInterface.updateUSer(userUpdateRequestDto));
     }
 }

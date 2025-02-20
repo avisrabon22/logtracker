@@ -7,6 +7,7 @@ import com.iimi.logtracker.Models.RoleModel;
 import com.iimi.logtracker.Models.UserModel;
 import com.iimi.logtracker.Repo.RoleRepo;
 import com.iimi.logtracker.Repo.UserRepo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class UserService implements UserInterface {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
+
 
     public UserService(UserRepo userRepo, RoleRepo roleRepo) {
         this.userRepo = userRepo;
@@ -59,11 +61,20 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public List<UsersResponseDto> getUsers() {
-        List<UserModel> users = userRepo.findAll();
+    public List<UsersResponseDto> getUsers() throws NotFound {
+        List<UserModel> users=new ArrayList<>();
+        try{
+             users = userRepo.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         List<UsersResponseDto> userResponseDtos = new ArrayList<>();
-        if (!users.isEmpty()) {
+        if(users.isEmpty())
+        {
+            throw new NotFound("No data found!");
+        }
+
             for (UserModel user : users) {
                  UsersResponseDto usersResponseDto = new UsersResponseDto();
                  usersResponseDto.setId(user.getId());
@@ -72,8 +83,7 @@ public class UserService implements UserInterface {
                 userResponseDtos.add(usersResponseDto);
             }
             return userResponseDtos;
-        }
-        return userResponseDtos;
+
     }
 
     @Override
@@ -98,6 +108,30 @@ public class UserService implements UserInterface {
             return userSignupResponseDto;
         }
       throw new NotFound("User not found");
+    }
+
+    @Override
+    public UserUpdateResponseDto updateUSer(UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
+        UserUpdateResponseDto userUpdateResponseDto = new UserUpdateResponseDto();
+        Optional<UserModel> user = userRepo.findById(userUpdateRequestDto.getId());
+        if (user.isPresent()){
+            UserModel userModel = new UserModel();
+            userModel.setId(userUpdateRequestDto.getId());
+            userModel.setUserName(userUpdateRequestDto.getUsername());
+            Optional<RoleModel> role=roleRepo.findByRoleName(userUpdateRequestDto.getRole());
+            if (role.isPresent()){
+                RoleModel roleModel = new RoleModel();
+                roleModel.setRoleName(userUpdateRequestDto.getRole());
+                userModel.setRole(roleModel);
+            }
+            userRepo.save(userModel);
+        }
+        else {
+            throw new NotFound("No user found!");
+        }
+        user.ifPresent(userModel -> userUpdateResponseDto.setUsername(userModel.getUserName()));
+
+        return userUpdateResponseDto;
     }
 
 

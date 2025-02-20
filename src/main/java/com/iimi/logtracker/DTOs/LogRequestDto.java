@@ -4,16 +4,13 @@ package com.iimi.logtracker.DTOs;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 @Getter
 @Setter
 public class LogRequestDto {
-    private String username;
-    private String device_name;
-    private String device_type;
-    private Long log_id;
-    private String log_date;
-    private String log_time;
+    private String Username;
+    private String DeviceName;
+    private String EventID;
+    private String EventTime;
+    private String EventDate;
+    private String  IPAddress;
 }

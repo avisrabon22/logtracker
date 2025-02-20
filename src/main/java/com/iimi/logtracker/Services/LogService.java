@@ -27,40 +27,43 @@ public class LogService implements LogInterface {
     }
 //    get logs *****************************************************************
     @Override
-    public List<LogResponseDto> getLogs() {
+    public List<LogResponseDto> getLogs() throws NotFound {
+        List<LogModel> logResponseDtos =new ArrayList<>();
         try {
-            List<LogModel> logResponseDtos = logRepo.findAll();
-            return logResponseDtos.stream().map(this::convertToDto).toList();
+            logResponseDtos = logRepo.findAll();
         } catch (Exception e) {
             throw new RuntimeException("Error in fetching logs");
         }
+
+        if (logResponseDtos.isEmpty())
+            throw new NotFound("No data found!");
+        return logResponseDtos.stream().map(this::convertToDto).toList();
+
 
     }
 //    add logs *****************************************************************
     @Override
     public void addLogs(LogRequestDto logRequestDto) {
-        try {
-            LogModel logModel = new LogModel();
-            logModel.setUsername(logRequestDto.getUsername());
-            logModel.setDevice_name(logRequestDto.getDevice_name());
-            logModel.setDevice_type(logRequestDto.getDevice_type());
-            logModel.setLog_id(logRequestDto.getLog_id());
-//            Set date and time
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate logDate = LocalDate.parse(logRequestDto.getLog_date(), dateFormatter);
+        if(logRequestDto.getUsername()==null|| logRequestDto.getEventID()==null)
+            throw new RuntimeException("Some value not getting");
+        LogModel logModel = new LogModel();
+        logModel.setUsername(logRequestDto.getUsername());
+        logModel.setDevice_name(logRequestDto.getDeviceName());
+        logModel.setLog_id(Long.parseLong(logRequestDto.getEventID()));
+//            Set date
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate logDate = LocalDate.parse(logRequestDto.getEventDate(), dateFormatter);
+        logModel.setLog_date(logDate);
+//            Set time
 
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalTime logTime = LocalTime.parse(logRequestDto.getLog_time(), timeFormatter);
 
-            logModel.setLog_date(logDate);
-            logModel.setLog_time(logTime);
+        logModel.setIPAddress(logRequestDto.getIPAddress());
 
+        try{
             logRepo.save(logModel);
-        }catch (DateTimeException e){
-            throw e;
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error in adding logs");
+        }catch (Exception e)
+        {
+            throw new RuntimeException("Unable to add logs");
         }
     }
 
@@ -88,7 +91,6 @@ public class LogService implements LogInterface {
         logResponseDto.setId(logModelResponse.getLog_id());
         logResponseDto.setUsername(logModelResponse.getUsername());
         logResponseDto.setDevice_name(logModelResponse.getDevice_name());
-        logResponseDto.setDevice_type(logModelResponse.getDevice_type());
         logResponseDto.setLog_id(logModelResponse.getLog_id());
         logResponseDto.setLog_date(logModelResponse.getLog_date());
         logResponseDto.setLog_time(logModelResponse.getLog_time());
@@ -100,7 +102,6 @@ public class LogService implements LogInterface {
         logResponseDto.setId(logModel.getId());
         logResponseDto.setUsername(logModel.getUsername());
         logResponseDto.setDevice_name(logModel.getDevice_name());
-        logResponseDto.setDevice_type(logModel.getDevice_type());
         logResponseDto.setLog_id(logModel.getLog_id());
         logResponseDto.setLog_date(logModel.getLog_date());
         logResponseDto.setLog_time(logModel.getLog_time());

@@ -20,10 +20,10 @@ public class LogModel extends BaseModel {
     private String device_name;
     @Column(name = "log_id")
     private Long log_id;
-    @Column(name = "device_type")
-    private String device_type;
     @Column(name = "log_date", columnDefinition = "DATE")
     private LocalDate log_date;
     @Column(name = "log_time", columnDefinition = "TIME")
     private LocalTime log_time;
+    @Column(name = "ip_address")
+    private  String IPAddress;
 }

@@ -8,7 +8,7 @@ import com.iimi.logtracker.Exception.NotFound;
 import java.util.List;
 
 public interface LogInterface {
-    List<LogResponseDto> getLogs();
+    List<LogResponseDto> getLogs() throws NotFound;
     void addLogs(LogRequestDto logRequestDto);
     List<LogResponseDto> searchByLogId(LogIdSearchRequestDto logIdSearchRequestDto) throws NotFound;
 

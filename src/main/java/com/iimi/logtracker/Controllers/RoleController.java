@@ -1,4 +1,5 @@
 package com.iimi.logtracker.Controllers;
+import com.iimi.logtracker.DTOs.LogRequestDto;
 import com.iimi.logtracker.DTOs.RoleRequestDto;
 import com.iimi.logtracker.DTOs.RoleResponseDto;
 import com.iimi.logtracker.DTOs.UpdateRoleRequestDto;

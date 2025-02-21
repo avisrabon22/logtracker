@@ -1,15 +1,12 @@
 package com.iimi.logtracker.Services;
-
-
 import com.iimi.logtracker.DTOs.LogIdSearchRequestDto;
 import com.iimi.logtracker.DTOs.LogRequestDto;
 import com.iimi.logtracker.DTOs.LogResponseDto;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.LogModel;
 import com.iimi.logtracker.Repo.LogRepo;
-import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
-import java.time.DateTimeException;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CommonsLog
 @Service
 public class LogService implements LogInterface {
     private final LogRepo logRepo;
+
 
     public LogService(LogRepo logRepo) {
         this.logRepo = logRepo;
@@ -44,20 +41,20 @@ public class LogService implements LogInterface {
 //    add logs *****************************************************************
     @Override
     public void addLogs(LogRequestDto logRequestDto) {
-        if(logRequestDto.getUsername()==null|| logRequestDto.getEventID()==null)
+        if(logRequestDto.getUserName()==null)
             throw new RuntimeException("Some value not getting");
+
         LogModel logModel = new LogModel();
-        logModel.setUsername(logRequestDto.getUsername());
+//       Set all log model value to DB from system
+        logModel.setUsername(logRequestDto.getUserName());
         logModel.setDevice_name(logRequestDto.getDeviceName());
-        logModel.setLog_id(Long.parseLong(logRequestDto.getEventID()));
+        logModel.setLog_id(Long.parseLong(logRequestDto.getEventId()));
 //            Set date
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate logDate = LocalDate.parse(logRequestDto.getEventDate(), dateFormatter);
-        logModel.setLog_date(logDate);
+        logModel.setLog_date(LocalDate.parse(logRequestDto.getEventDate()));
 //            Set time
-
-
-        logModel.setIPAddress(logRequestDto.getIPAddress());
+        logModel.setLog_time(LocalTime.parse(logRequestDto.getEventTime()));
+//        Set ip address
+        logModel.setIPAddress(logRequestDto.getIpAddress());
 
         try{
             logRepo.save(logModel);
@@ -88,23 +85,24 @@ public class LogService implements LogInterface {
 // set the response dto of log for search by log id *****************************************************************
     private static LogResponseDto getLogResponseDto(LogModel logModelResponse) {
         LogResponseDto logResponseDto = new LogResponseDto();
-        logResponseDto.setId(logModelResponse.getLog_id());
-        logResponseDto.setUsername(logModelResponse.getUsername());
-        logResponseDto.setDevice_name(logModelResponse.getDevice_name());
-        logResponseDto.setLog_id(logModelResponse.getLog_id());
-        logResponseDto.setLog_date(logModelResponse.getLog_date());
-        logResponseDto.setLog_time(logModelResponse.getLog_time());
+        logResponseDto.setUserName(logModelResponse.getUsername());
+        logResponseDto.setDeviceName(logModelResponse.getDevice_name());
+        logResponseDto.setIpAddress(logModelResponse.getIPAddress());
+        logResponseDto.setEventId(logModelResponse.getLog_id().toString());
+        logResponseDto.setEventDate(logModelResponse.getLog_date().toString());
+        logResponseDto.setEventTime(logModelResponse.getLog_time().toString());
         return logResponseDto;
     }
 // convert log model to log response dto *****************************************************************
     private LogResponseDto convertToDto(LogModel logModel) {
         LogResponseDto logResponseDto = new LogResponseDto();
         logResponseDto.setId(logModel.getId());
-        logResponseDto.setUsername(logModel.getUsername());
-        logResponseDto.setDevice_name(logModel.getDevice_name());
-        logResponseDto.setLog_id(logModel.getLog_id());
-        logResponseDto.setLog_date(logModel.getLog_date());
-        logResponseDto.setLog_time(logModel.getLog_time());
+        logResponseDto.setEventId(logModel.getLog_id().toString());
+        logResponseDto.setUserName(logModel.getUsername());
+        logResponseDto.setDeviceName(logModel.getDevice_name());
+        logResponseDto.setEventDate(logModel.getLog_date().toString());
+        logResponseDto.setEventTime(logModel.getLog_time().toString());
+        logResponseDto.setIpAddress(logModel.getIPAddress());
         return logResponseDto;
     }
 }

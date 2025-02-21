@@ -7,10 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LogRequestDto {
-    private String Username;
-    private String DeviceName;
-    private String EventID;
-    private String EventTime;
-    private String EventDate;
-    private String  IPAddress;
+    private String userName;
+    private String deviceName;
+    private String eventId;
+    private String eventTime;
+    private String eventDate;
+    private String  ipAddress;
+
 }

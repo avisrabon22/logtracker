@@ -113,15 +113,17 @@ public class UserService implements UserInterface {
     @Override
     public UserUpdateResponseDto updateUSer(UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
         UserUpdateResponseDto userUpdateResponseDto = new UserUpdateResponseDto();
+        System.out.println(userUpdateRequestDto.getRole());
         Optional<UserModel> user = userRepo.findById(userUpdateRequestDto.getId());
         if (user.isPresent()){
             UserModel userModel = new UserModel();
             userModel.setId(userUpdateRequestDto.getId());
             userModel.setUserName(userUpdateRequestDto.getUsername());
-            Optional<RoleModel> role=roleRepo.findByRoleName(userUpdateRequestDto.getRole());
+            userModel.setPassword(userUpdateRequestDto.getPassword());
+            Optional<RoleModel> role=roleRepo.findByRoleName("ROLE_"+userUpdateRequestDto.getRole());
             if (role.isPresent()){
                 RoleModel roleModel = new RoleModel();
-                roleModel.setRoleName(userUpdateRequestDto.getRole());
+                roleModel.setRoleName(role.get().getRoleName());
                 userModel.setRole(roleModel);
             }
             userRepo.save(userModel);

@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<?> updateUser(UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
         return ResponseEntity.ok().body(userInterface.updateUSer(userUpdateRequestDto));
     }
 }

@@ -120,12 +120,10 @@ public class UserService implements UserInterface {
             userModel.setId(userUpdateRequestDto.getId());
             userModel.setUserName(userUpdateRequestDto.getUsername());
             userModel.setPassword(userUpdateRequestDto.getPassword());
+
             Optional<RoleModel> role=roleRepo.findByRoleName("ROLE_"+userUpdateRequestDto.getRole());
-            if (role.isPresent()){
-                RoleModel roleModel = new RoleModel();
-                roleModel.setRoleName(role.get().getRoleName());
-                userModel.setRole(roleModel);
-            }
+            role.ifPresent(userModel::setRole);
+
             userRepo.save(userModel);
         }
         else {

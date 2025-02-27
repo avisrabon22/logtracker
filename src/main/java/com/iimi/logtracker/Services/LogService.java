@@ -5,14 +5,13 @@ import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.LogModel;
 import com.iimi.logtracker.Models.LogModelVTwo;
 import com.iimi.logtracker.Models.LogonDataModel;
-import com.iimi.logtracker.Models.LogonDataRequestDto;
+import com.iimi.logtracker.DTOs.LogonDataRequestDto;
 import com.iimi.logtracker.Repo.LogRepo;
 import com.iimi.logtracker.Repo.LogVTwoRepo;
 import com.iimi.logtracker.Repo.LogonDataRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -3,14 +3,11 @@ package com.iimi.logtracker.Controllers;
 
 import com.iimi.logtracker.DTOs.LogRequestDto;
 import com.iimi.logtracker.DTOs.LogRequestVTwoDto;
-import com.iimi.logtracker.DTOs.LogResponseDto;
 import com.iimi.logtracker.Exception.NotFound;
-import com.iimi.logtracker.Models.LogonDataRequestDto;
+import com.iimi.logtracker.DTOs.LogonDataRequestDto;
 import com.iimi.logtracker.Services.LogInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/log")
@@ -42,13 +39,16 @@ public class LogController {
 
         return ResponseEntity.ok().body("Log added");
     }
+//    add logs version two *****************************************************************************************
     @PostMapping("/add-logs-v-two")
     public ResponseEntity<?> addLogsVTwo(@RequestBody LogRequestVTwoDto logRequestVTwoDto) throws Exception {
         logInterface.addLogsVTwo(logRequestVTwoDto);
         return ResponseEntity.ok().body("Data added in store");
     }
+//    add login user logs for Windows system in domain of company by powershell script ****************************************
     @PostMapping("/add-logon-logs")
     public ResponseEntity<?> addLogonData(@RequestBody LogonDataRequestDto logonDataRequestDto) throws Exception {
+        System.out.println(logonDataRequestDto.getUserName());
         logInterface.addLogonData(logonDataRequestDto);
         return ResponseEntity.ok().body("Data added in store");
     }

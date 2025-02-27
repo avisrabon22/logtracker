@@ -2,7 +2,7 @@ package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.*;
 import com.iimi.logtracker.Exception.NotFound;
-import com.iimi.logtracker.Models.LogonDataRequestDto;
+import com.iimi.logtracker.DTOs.LogonDataRequestDto;
 
 import java.util.List;
 

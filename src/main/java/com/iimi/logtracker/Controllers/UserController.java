@@ -2,6 +2,7 @@ package com.iimi.logtracker.Controllers;
 
 import com.iimi.logtracker.DTOs.*;
 import com.iimi.logtracker.Exception.AlreadyExist;
+import com.iimi.logtracker.Exception.EmptyException;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Services.UserInterface;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
-        return ResponseEntity.ok().body(userInterface.updateUSer(userUpdateRequestDto));
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto) throws Exception {
+        return ResponseEntity.ok().body(userInterface.updateUser(userUpdateRequestDto));
     }
 }

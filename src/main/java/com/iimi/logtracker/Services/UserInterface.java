@@ -2,6 +2,7 @@ package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.*;
 import com.iimi.logtracker.Exception.AlreadyExist;
+import com.iimi.logtracker.Exception.EmptyException;
 import com.iimi.logtracker.Exception.NotFound;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -13,5 +14,5 @@ public interface UserInterface {
     public List<UsersResponseDto> getUsers() throws NotFound;
     public GetUserResponseDto getUser(GetUserRequestDto getUserRequestDto) throws NotFound;
     public UserSignupResponseDto deleteUser(Long id) throws NotFound;
-    public UserUpdateResponseDto updateUSer(UserUpdateRequestDto userUpdateRequestDto) throws NotFound;
+    public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) throws Exception;
 }

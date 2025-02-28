@@ -2,6 +2,7 @@ package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.*;
 import com.iimi.logtracker.Exception.AlreadyExist;
+import com.iimi.logtracker.Exception.EmptyException;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.RoleModel;
 import com.iimi.logtracker.Models.UserModel;
@@ -19,7 +20,6 @@ import java.util.Optional;
 public class UserService implements UserInterface {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
-
 
     public UserService(UserRepo userRepo, RoleRepo roleRepo) {
         this.userRepo = userRepo;
@@ -111,9 +111,11 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public UserUpdateResponseDto updateUSer(UserUpdateRequestDto userUpdateRequestDto) throws NotFound {
+    public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) throws Exception {
+        if (userUpdateRequestDto.getUsername().isEmpty() || userUpdateRequestDto.getPassword().isEmpty()||userUpdateRequestDto.getRole().isEmpty())
+            throw new EmptyException("Please fill all filed before submit");
         UserUpdateResponseDto userUpdateResponseDto = new UserUpdateResponseDto();
-        System.out.println(userUpdateRequestDto.getRole());
+
         Optional<UserModel> user = userRepo.findById(userUpdateRequestDto.getId());
         if (user.isPresent()){
             UserModel userModel = new UserModel();

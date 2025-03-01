@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class LogController {
     private final LogInterface logInterface;
 
+
     public LogController(LogInterface logInterface) {
         this.logInterface = logInterface;
     }
@@ -23,11 +24,16 @@ public class LogController {
     public ResponseEntity<?> getLogs() throws NotFound {
       return ResponseEntity.ok().body(logInterface.getLogs());
     }
+//    Get data for logs for version *******************************************************************************************
     @GetMapping("/get-logs-v-two")
     public ResponseEntity<?> getLogsVTwo(){
         return ResponseEntity.ok().body("");
     }
-
+// get log on data ****************************************************
+@GetMapping("/add-logon-logs")
+public ResponseEntity<?> getLogOnData(@RequestBody LogonDataRequestDto logonDataRequestDto) throws NotFound {
+        return ResponseEntity.ok().body(logInterface.getLogOn(logonDataRequestDto));
+}
 
 //    Add logs from system ****************************************************************************************************
     @PostMapping("/add-log")

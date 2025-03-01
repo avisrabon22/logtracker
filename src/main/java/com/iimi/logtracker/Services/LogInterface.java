@@ -13,5 +13,5 @@ public interface LogInterface {
     void addLogsVTwo(LogRequestVTwoDto logRequestVTwoDto) throws Exception;
     List<LogResponseVTwoDto> getLogsVTwo(LogRequestVTwoDto logRequestVTwoDto);
     void addLogonData(LogonDataRequestDto logonDataRequestDto) throws Exception;
-
+    List<LogOnResponseDto> getLogOn(LogonDataRequestDto logonDataRequestDto) throws NotFound;
 }

@@ -1,6 +1,7 @@
 package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.*;
+import com.iimi.logtracker.Exception.EmptyException;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.LogModel;
 import com.iimi.logtracker.Models.LogModelVTwo;
@@ -116,7 +117,16 @@ public class LogService implements LogInterface {
             throw new RuntimeException(e);
         }
     }
-//    search by log id *****************************************************************
+
+    @Override
+    public List<LogOnResponseDto> getLogOn(LogonDataRequestDto logonDataRequestDto) throws NotFound {
+        List<LogonDataModel> logonDataModels=logonDataRepo.findAll();
+        if (logonDataModels.isEmpty())
+            throw new NotFound("No data in db");
+        return List.of();
+    }
+
+    //    search by log id *****************************************************************
     @Override
     public List<LogResponseDto> searchByLogId(LogIdSearchRequestDto logIdSearchRequestDto) throws NotFound {
         List<LogResponseDto> logResponseDtoList = new ArrayList<>();
@@ -134,6 +144,11 @@ public class LogService implements LogInterface {
 
         }
     }
+
+
+
+
+
 
     // set the response dto of log for search by log id *****************************************************************
     private static LogResponseDto getLogResponseDto(LogModel logModelResponse) {

@@ -6,8 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LogOnResponseDto {
+    private Long id;
     private String userName;
     private String eventID;
+    private String eventName;
     private String timeCreated;
     private String dateCreated;
     private String ipAddress;

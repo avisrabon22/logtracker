@@ -8,6 +8,7 @@ import lombok.Setter;
 public class LogonDataRequestDto {
     private String userName;
     private String eventID;
+    private String eventName;
     private String timeCreated;
     private String dateCreated;
     private String ipAddress;

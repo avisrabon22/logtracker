@@ -107,9 +107,10 @@ public class LogService implements LogInterface {
         LogonDataModel logonDataModel = new LogonDataModel();
         logonDataModel.setUserName(logonDataRequestDto.getUserName());
         logonDataModel.setEventID(Long.parseLong(logonDataRequestDto.getEventID()));
+        logonDataModel.setEventName(logonDataRequestDto.getEventName());
         logonDataModel.setDateCreated(LocalDate.parse(logonDataRequestDto.getDateCreated()));
         logonDataModel.setTimeCreated(LocalTime.parse(logonDataRequestDto.getTimeCreated()));
-        logonDataModel.setComputerName(logonDataModel.getComputerName());
+        logonDataModel.setComputerName(logonDataRequestDto.getComputerName());
         logonDataModel.setIpAddress(logonDataRequestDto.getIpAddress());
         try{
             logonDataRepo.save(logonDataModel);
@@ -119,14 +120,22 @@ public class LogService implements LogInterface {
     }
 
     @Override
-    public List<LogOnResponseDto> getLogOn(LogonDataRequestDto logonDataRequestDto) throws NotFound {
+    public List<LogOnResponseDto> getLogOn() throws NotFound {
         List<LogonDataModel> logonDataModels=logonDataRepo.findAll();
         if (logonDataModels.isEmpty())
             throw new NotFound("No data in db");
-        return List.of();
+
+        List<LogOnResponseDto> logOnResponseDtos = new ArrayList<>();
+        for(LogonDataModel logonDataModel:logonDataModels){
+            LogOnResponseDto logOnResponseDto = getLogOnResponseDto(logonDataModel);
+            logOnResponseDtos.add(logOnResponseDto);
+        }
+        return logOnResponseDtos;
     }
 
-    //    search by log id *****************************************************************
+
+
+     // search by log id *****************************************************************
     @Override
     public List<LogResponseDto> searchByLogId(LogIdSearchRequestDto logIdSearchRequestDto) throws NotFound {
         List<LogResponseDto> logResponseDtoList = new ArrayList<>();
@@ -144,12 +153,19 @@ public class LogService implements LogInterface {
 
         }
     }
-
-
-
-
-
-
+    // set the logon data *****************************************************************************
+    private static LogOnResponseDto getLogOnResponseDto(LogonDataModel logonDataModel) {
+        LogOnResponseDto logOnResponseDto = new LogOnResponseDto();
+        logOnResponseDto.setId(logonDataModel.getId());
+        logOnResponseDto.setUserName(logonDataModel.getUserName());
+        logOnResponseDto.setIpAddress(logonDataModel.getIpAddress());
+        logOnResponseDto.setEventID(logonDataModel.getEventID().toString());
+        logOnResponseDto.setEventName(logonDataModel.getEventName());
+        logOnResponseDto.setComputerName(logonDataModel.getComputerName());
+        logOnResponseDto.setTimeCreated(logonDataModel.getTimeCreated().toString());
+        logOnResponseDto.setDateCreated(logonDataModel.getDateCreated().toString());
+        return logOnResponseDto;
+    }
     // set the response dto of log for search by log id *****************************************************************
     private static LogResponseDto getLogResponseDto(LogModel logModelResponse) {
         LogResponseDto logResponseDto = new LogResponseDto();
@@ -161,7 +177,6 @@ public class LogService implements LogInterface {
         logResponseDto.setEventTime(logModelResponse.getLog_time().toString());
         return logResponseDto;
     }
-
     // convert log model to log response dto *****************************************************************
     private LogResponseDto convertToDto(LogModel logModel) {
         LogResponseDto logResponseDto = new LogResponseDto();

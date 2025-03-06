@@ -15,6 +15,7 @@ import java.time.LocalTime;
 public class LogonDataModel extends BaseModel {
     private String computerName;
     private Long eventID;
+    private String eventName;
     private String userName;
     private String ipAddress;
     private LocalDate dateCreated;

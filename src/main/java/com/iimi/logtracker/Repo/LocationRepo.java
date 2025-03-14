@@ -1,9 +1,9 @@
 package com.iimi.logtracker.Repo;
 
-import com.iimi.logtracker.Models.LogVTwoModel;
+import com.iimi.logtracker.Models.LocationModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LogVTwoRepo extends JpaRepository<LogVTwoModel,Long> {
+public interface LocationRepo extends JpaRepository<LocationModel,Long> {
 }

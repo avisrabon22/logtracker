@@ -27,6 +27,7 @@ public class FloorMapService implements FloorMapInterface{
         List<FloorResponseDto> floorResponseDtos = new ArrayList<>();
            for(FloorMapModel responseModel:floorMapModel){
                FloorResponseDto floorResponseDto = new FloorResponseDto();
+               floorResponseDto.setId(responseModel.getId());
                floorResponseDto.setCpuId(responseModel.getCpuId());
                floorResponseDto.setDisplayId(responseModel.getDisplayId());
                floorResponseDto.setKeyboardId(responseModel.getKeyboardId());

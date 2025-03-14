@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
-public class LogModelVTwo extends BaseModel{
+public class LogVTwoModel extends BaseModel{
     private String userName;
     private String deviceName;
     private Long eventId;

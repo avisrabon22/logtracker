@@ -1,10 +1,9 @@
 package com.iimi.logtracker.Services;
 
 import com.iimi.logtracker.DTOs.*;
-import com.iimi.logtracker.Exception.EmptyException;
 import com.iimi.logtracker.Exception.NotFound;
 import com.iimi.logtracker.Models.LogModel;
-import com.iimi.logtracker.Models.LogModelVTwo;
+import com.iimi.logtracker.Models.LogVTwoModel;
 import com.iimi.logtracker.Models.LogonDataModel;
 import com.iimi.logtracker.DTOs.LogonDataRequestDto;
 import com.iimi.logtracker.Repo.LogRepo;
@@ -83,21 +82,21 @@ public class LogService implements LogInterface {
         if (logRequestVTwoDto.getUserName().isEmpty()) {
             throw new Exception("Data miss!!");
         }
-        LogModelVTwo logModelVTwo = new LogModelVTwo();
-        logModelVTwo.setUserName(logRequestVTwoDto.getUserName());
-        logModelVTwo.setUserId(logRequestVTwoDto.getUserId());
-        logModelVTwo.setEventId(Long.parseLong(logRequestVTwoDto.getEventId()));
-        logModelVTwo.setLogName(logRequestVTwoDto.getLogName());
-        logModelVTwo.setEventDescription(logRequestVTwoDto.getEventDescription());
-        logModelVTwo.setEventDate(LocalDate.parse(logRequestVTwoDto.getEventDate()));
-        logModelVTwo.setEventTime(LocalTime.parse(logRequestVTwoDto.getEventTime()));
-        logModelVTwo.setDeviceName(logModelVTwo.getDeviceName());
-        logModelVTwo.setMachineName(logModelVTwo.getMachineName());
-        logModelVTwo.setProviderName(logModelVTwo.getProviderName());
-        logModelVTwo.setIpAddress(logModelVTwo.getIpAddress());
-        logModelVTwo.setTaskDisplayName(logRequestVTwoDto.getTaskDisplayName());
-        logModelVTwo.setLevelDisplayName(logRequestVTwoDto.getLevelDisplayName());
-        logVTwoRepo.save(logModelVTwo);
+        LogVTwoModel logVTwoModel = new LogVTwoModel();
+        logVTwoModel.setUserName(logRequestVTwoDto.getUserName());
+        logVTwoModel.setUserId(logRequestVTwoDto.getUserId());
+        logVTwoModel.setEventId(Long.parseLong(logRequestVTwoDto.getEventId()));
+        logVTwoModel.setLogName(logRequestVTwoDto.getLogName());
+        logVTwoModel.setEventDescription(logRequestVTwoDto.getEventDescription());
+        logVTwoModel.setEventDate(LocalDate.parse(logRequestVTwoDto.getEventDate()));
+        logVTwoModel.setEventTime(LocalTime.parse(logRequestVTwoDto.getEventTime()));
+        logVTwoModel.setDeviceName(logVTwoModel.getDeviceName());
+        logVTwoModel.setMachineName(logVTwoModel.getMachineName());
+        logVTwoModel.setProviderName(logVTwoModel.getProviderName());
+        logVTwoModel.setIpAddress(logVTwoModel.getIpAddress());
+        logVTwoModel.setTaskDisplayName(logRequestVTwoDto.getTaskDisplayName());
+        logVTwoModel.setLevelDisplayName(logRequestVTwoDto.getLevelDisplayName());
+        logVTwoRepo.save(logVTwoModel);
     }
     //Add logon log
     public void addLogonData(LogonDataRequestDto logonDataRequestDto) throws Exception {

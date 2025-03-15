@@ -8,4 +8,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AssetTypeModel extends BaseModel{
+    private String assetType;
+    private String assetTypeDescription;
 }

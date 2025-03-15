@@ -8,8 +8,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-
-public class AssetStatus extends BaseModel {
+public class AssetStatusModel extends BaseModel {
     private String assetStatus;
     private String assetStatusDescription;
 }

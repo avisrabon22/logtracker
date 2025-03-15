@@ -8,4 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LocationModel extends BaseModel {
+    private String locationName;
+    private String locationDescription;
 }
